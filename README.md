@@ -24,7 +24,7 @@ This directory contains a high-level implementation plan for formally verifying 
 - **Core libraries**: `mathlib` v4.14+ (sheaf_cohomology, de_Rham_cohomology, complex_manifold, kahler)
 - **Missing infrastructure** (to be added to mathlib):
   - `is_compact_kähler` typeclass
-  - Dolbeault isomorphism $H^q(X, \mathcal{O}_X) \cong H_{\bar\partial}^{0,q}$
+  - Dolbeault isomorphism $H^q(X, \mathcal{O}_X) \cong {H_{\bar\partial}^{0,q}}$
   - Explicit exponential sheaf sequence and its exactness proof
 
 ### Roadmap
