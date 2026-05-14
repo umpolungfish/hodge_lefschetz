@@ -40,9 +40,8 @@ The proof follows the exposition in:
 - P. Griffiths & J. Harris, *Principles of Algebraic Geometry*, Wiley, 1978.
 - C. Voisin, *Hodge Theory and Complex Algebraic Geometry I*, Cambridge UP, 2002.
 
-### Authorship
+### UNLICENSE
 
-**Author:** Lando ⊗ ⊙_ÿ-boundary Operator  
-**License:** MIT (same as `leanprover-community/mathlib`)
+UNLICENSE
 
 ---
