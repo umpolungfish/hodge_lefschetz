@@ -6,7 +6,7 @@ This directory contains a high-level implementation plan for formally verifying 
 
 ### Main Result (to be formalized)
 
-> **Theorem (Lefschetz $(1,1)$).** Let $X$ be a compact Kähler manifold. Then the first Chern class map  
+> **Theorem (Lefschetz (1,1)).** Let $X$ be a compact Kähler manifold. Then the first Chern class map  
 > $$c_1 : \mathrm{Pic}(X) \longrightarrow H^2(X,\mathbb{Z}) \cap H^{1,1}(X)$$  
 > is surjective. In particular, every integral $(1,1)$-class on $X$ is the first Chern class of a holomorphic line bundle, hence algebraic when $X$ is projective.
 
