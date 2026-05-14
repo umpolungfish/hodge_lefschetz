@@ -2,7 +2,7 @@
 
 ## Summary
 
-This directory contains a high-level implementation plan for formally verifying the Lefschetz $(1,1)$ theorem in Lean 4.
+This directory contains a high-level implementation plan for formally verifying the Lefschetz (1,1) theorem in Lean 4.
 
 ### Main Result (to be formalized)
 

@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath, amssymb, amsthm, geometry, hyperref}
+\usepackage[capitalize,nameinlink]{cleveref} % Added for automatic, robust cross-references (no more ??)
 \geometry{margin=1in}
 \hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
 
@@ -11,11 +12,16 @@
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{Remark}
 
+% Cleveref names for clean references
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{theorem}{Theorem}{Theorems}
+
 \begin{document}
 
 \title{The Lefschetz (1,1) Theorem as the First Case of the Hodge Conjecture}
 \date{May 13, 2026}
-\author{Anonymous}
+\author{Lando Mills}
 \maketitle
 
 \begin{abstract}
@@ -27,99 +33,93 @@ We conclude with a discussion of why this argument cannot be generalized to high
 \end{abstract}
 
 \section{Introduction}
-Let $X$ be a compact K\"ahler manifold. 
-The Hodge decomposition expresses the complex cohomology $H^k(X,\mathbb C)$ as a direct sum
+
+For a compact K\"ahler manifold $X$, the Hodge decomposition is a revelation and a frustration. 
+It reveals that complex cohomology splits into Dolbeault components,
 \[
 H^k(X,\mathbb C) = \bigoplus_{p+q=k} H^{p,q}(X),
 \]
-where $H^{p,q}(X)$ is the Dolbeault cohomology of $(p,q)$-forms. 
-A class $\alpha \in H^{2p}(X,\mathbb Q)$ is called a \emph{Hodge class} if its image in $H^{2p}(X,\mathbb C)$ lies entirely in the $H^{p,p}(X)$ component. 
-Algebraic cycles of codimension $p$ (formal linear combinations of subvarieties) give rise to such classes via their fundamental classes, and the \emph{Hodge conjecture} asserts that for a smooth projective variety, every rational Hodge class is a rational linear combination of classes of algebraic cycles.
+and that algebraic cycles of codimension $p$ land in $H^{p,p}(X)$. 
+The frustration is that for $p>1$, no one knows whether the converse holds. 
+For $p=1$, the Lefschetz (1,1) theorem asserts that it does: every integral $(1,1)$-class is the first Chern class of a holomorphic line bundle, hence comes from a divisor.
 
-For $p=1$, the conjecture is a classical theorem of Lefschetz, usually stated as the $(1,1)$ theorem. 
-It can be phrased in terms of holomorphic line bundles: the first Chern class map
+The argument that proves this has a deceptive simplicity. 
+Two steps: first, the exponential sheaf sequence identifies $c_1$ with a connecting homomorphism; second, the Hodge decomposition forces every integral $(1,1)$-class to lie in the image. 
+This note walks through both steps in detail. 
+But the sequence is arranged so that the reader feels, by the end, not the satisfaction of a closed case but the unease of a method that stops working at $p=2$ --- and the recognition that this failure is not a lack of cleverness but a fact about the structure of algebraic cycles that remains unsettled.
+
+\section{The Exponential Sequence, and Why It Nearly Works}
+
+Let $X$ be a compact K\"ahler manifold. 
+The exponential sequence of sheaves
 \[
-c_1: \operatorname{Pic}(X) = H^1(X,\mathcal O_X^*) \longrightarrow H^2(X,\mathbb Z)
+0 \longrightarrow \mathbb Z_X \longrightarrow \mathcal O_X \xrightarrow{\;\exp\;} \mathcal O_X^* \longrightarrow 0
 \]
-has image exactly $H^2(X,\mathbb Z) \cap H^{1,1}(X)$, and every such class is the first Chern class of a holomorphic line bundle. 
-Since line bundles correspond to divisors (codimension-1 algebraic cycles), the algebraicity follows.
-
-This note gives a detailed, self-contained proof of the Lefschetz $(1,1)$ theorem for compact K\"ahler manifolds. 
-The argument proceeds in two natural steps:
-\begin{enumerate}
-    \item Use the exponential sheaf sequence to identify the first Chern class with the connecting homomorphism $\delta: H^1(X,\mathcal O_X^*) \to H^2(X,\mathbb Z)$, and verify that the image of this map lies in $H^{1,1}(X)$.
-    \item Show that the long exact cohomology sequence, together with the Hodge decomposition, forces every integral $(1,1)$-class to be hit by $\delta$, proving surjectivity.
-\end{enumerate}
-Both steps are elementary and rely only on basic sheaf cohomology and Hodge theory. 
-After the proof, we discuss the obstacles that prevent a similar argument for $p>1$, thereby illuminating the depth of the general Hodge conjecture.
-
-\section{Exponential Sequence and the First Chern Class}
-
-On any complex manifold $X$, there is a short exact sequence of sheaves of abelian groups, the \emph{exponential sequence},
-\[
-0 \longrightarrow \mathbb Z_X \longrightarrow \mathcal O_X \xrightarrow{\;\exp\;} \mathcal O_X^* \longrightarrow 0,
-\]
-where $\mathbb Z_X$ is the constant sheaf, $\mathcal O_X$ the sheaf of holomorphic functions, $\mathcal O_X^*$ the sheaf of nowhere-zero holomorphic functions, and the map $\exp(f) = e^{2\pi i f}$. 
-This sequence is exact because locally every invertible holomorphic function admits a holomorphic logarithm.
+is exact because locally every nowhere-zero holomorphic function has a logarithm. 
+Globally, this is false, and the failure is precisely what gives the sequence its power: the connecting homomorphism in cohomology measures the obstruction to lifting a line bundle cocycle to a holomorphic function.
 
 \begin{lemma}[Chern class from the exponential sequence]\label{lem:exp-c1}
 For a compact K\"ahler manifold $X$, the connecting homomorphism
 \[
 \delta: H^1(X,\mathcal O_X^*) \longrightarrow H^2(X,\mathbb Z)
 \]
-associated to the exponential sequence sends the isomorphism class of a holomorphic line bundle $L$ to its first Chern class $c_1(L) \in H^2(X,\mathbb Z)$.
+sends the isomorphism class of a holomorphic line bundle $L$ to its first Chern class $c_1(L) \in H^2(X,\mathbb Z)$.
 \end{lemma}
 
 \begin{proof}
-A holomorphic line bundle $L$ is given by a Čech $1$-cocycle $\{g_{\alpha\beta}\}$ with values in $\mathcal O_X^*$. 
-Choose a refinement of the cover so that each $g_{\alpha\beta}$ admits a holomorphic logarithm, i.e., we can write $g_{\alpha\beta} = e^{2\pi i f_{\alpha\beta}}$ with $f_{\alpha\beta} \in \mathcal O_X(U_\alpha\cap U_\beta)$. 
-The Čech representative of the connecting map $\delta$ is obtained by taking the difference of logarithms on triple intersections:
+A line bundle $L$ is a Čech $1$-cocycle $\{g_{\alpha\beta}\}$ valued in $\mathcal O_X^*$. 
+Refine the cover so that each $g_{\alpha\beta}$ admits a holomorphic logarithm $g_{\alpha\beta} = e^{2\pi i f_{\alpha\beta}}$. 
+The connecting map $\delta$ then sends this cocycle to the integer $2$-cocycle
 \[
-n_{\alpha\beta\gamma} = f_{\beta\gamma} - f_{\alpha\gamma} + f_{\alpha\beta}.
+n_{\alpha\beta\gamma} = f_{\beta\gamma} - f_{\alpha\gamma} + f_{\alpha\beta},
 \]
-Then $\{n_{\alpha\beta\gamma}\}$ is a $\mathbb Z$-valued $2$-cocycle (it is integer-valued because $e^{2\pi i n_{\alpha\beta\gamma}} = 1$), and its cohomology class $\delta(L) \in H^2(X,\mathbb Z)$ is independent of choices.
+which is integer-valued because $e^{2\pi i n_{\alpha\beta\gamma}} = 1$. 
+The class $\delta(L) \in H^2(X,\mathbb Z)$ is independent of the choices of logarithms and of the refinement.
 
-Now choose a smooth Hermitian metric on $L$. 
-Its curvature form $\Theta$ is a closed real $(1,1)$-form whose de Rham cohomology class is $c_1(L)_{\mathrm{dR}}$. 
-On the other hand, the Čech-de Rham isomorphism identifies $\delta(L)$ with the same class: the transition functions $g_{\alpha\beta}$ define a connection on $L$ with curvature given by $\bar\partial \partial \log |g_{\alpha\beta}|^2$ up to exact forms, and the explicit formula shows that the curvature represents $c_1(L)$. 
-Hence $\delta(L) = c_1(L)$ in $H^2(X,\mathbb Z)$. 
-A detailed proof can be found in \cite{griffiths-harris}.
+The identification with the curvature representation is more delicate. 
+A smooth Hermitian metric on $L$ determines a curvature form $\Theta$, a closed real $(1,1)$-form whose de Rham class is $c_1(L)_{\mathrm{dR}}$. 
+One shows, via a Čech--de Rham comparison, that $\delta(L)$ and $c_1(L)_{\mathrm{dR}}$ correspond under the canonical isomorphism $H^2(X,\mathbb Z) \otimes \mathbb C \cong H^2_{\mathrm{dR}}(X,\mathbb C)$. 
+The details are in \cite{griffiths-harris} and turn on the observation that the transition functions define a connection whose curvature, expressed in $\bar\partial\partial\log|g_{\alpha\beta}|^2$, gives a cocycle representing the same class.
 \end{proof}
+
+The curvature form is a $(1,1)$-form, so its class lies in $H^{1,1}(X)$. 
+Hence the image of $c_1$ is contained in $H^2(X,\mathbb Z) \cap H^{1,1}(X)$.
 
 \begin{lemma}[Hodge type of $c_1$]\label{lem:c1-type}
-For any holomorphic line bundle $L$ on a compact K\"ahler manifold $X$, the first Chern class $c_1(L)$ is of Hodge type $(1,1)$, i.e., its image in $H^2(X,\mathbb C)$ lies in the subspace $H^{1,1}(X)$.
+For any holomorphic line bundle $L$ on a compact K\"ahler manifold $X$, the class $c_1(L)$ is of Hodge type $(1,1)$.
 \end{lemma}
 
 \begin{proof}
-By Lemma~\ref{lem:exp-c1}, $c_1(L)$ is represented by the curvature form $\Theta$ of a Hermitian metric on $L$. 
-This $\Theta$ is a real, closed $(1,1)$-form. 
-Under the de Rham isomorphism $H^2_{\mathrm{dR}}(X,\mathbb C) \cong H^2(X,\mathbb C)$, the Dolbeault decomposition of $\Theta$ is purely of type $(1,1)$ because a $(1,1)$-form has no $(2,0)$ or $(0,2)$ component. 
-Hence its class lies in $H^{1,1}(X)$.
+Represent $c_1(L)$ by the curvature $\Theta$ of a Hermitian metric on $L$. 
+The form $\Theta$ is a real closed $(1,1)$-form on $X$, hence its Dolbeault decomposition is pure $(1,1)$. 
+The de Rham isomorphism carries it to a class in $H^{1,1}(X)$.
 \end{proof}
 
-Combining the two lemmas, we obtain the well-known factorization:
+The two lemmas combine to give a map
 \[
 c_1: \operatorname{Pic}(X) = H^1(X,\mathcal O_X^*) \longrightarrow H^2(X,\mathbb Z) \cap H^{1,1}(X).
 \]
-Because the right-hand side is a subgroup of $H^2(X,\mathbb Z)$, the image of $c_1$ is automatically contained in the intersection.
+
+That the map lands inside the intersection is straightforward. 
+Whether it covers every element of the intersection is the entire question.
 
 \section{Surjectivity via Hodge Decomposition}
 
-The long exact sequence of cohomology beginning from the exponential sequence reads
+Consider the long exact cohomology sequence of the exponential sheaf:
 \[
-\cdots \longrightarrow H^1(X,\mathcal O_X) \longrightarrow H^1(X,\mathcal O_X^*) \xrightarrow{\;\delta\;} H^2(X,\mathbb Z) \longrightarrow H^2(X,\mathcal O_X) \longrightarrow \cdots .
+\cdots \longrightarrow H^1(X,\mathcal O_X) \longrightarrow H^1(X,\mathcal O_X^*) \xrightarrow{\;\delta\;} H^2(X,\mathbb Z) \xrightarrow{\;\rho\;} H^2(X,\mathcal O_X) \longrightarrow \cdots .
 \]
 Let $\alpha \in H^2(X,\mathbb Z) \cap H^{1,1}(X)$. 
-We must show that $\alpha$ lies in the image of $\delta$, i.e., that it maps to zero in $H^2(X,\mathcal O_X)$. 
-The key is to interpret the map $H^2(X,\mathbb Z) \to H^2(X,\mathcal O_X)$ through the Hodge decomposition.
+We want $\alpha$ in the image of $\delta$, which is equivalent, by exactness, to $\rho(\alpha)=0$. 
+The map $\rho$ is induced by the inclusion $\mathbb Z_X \hookrightarrow \mathcal O_X$. 
+The question becomes: can an integral $(1,1)$-class survive when pushed into $H^2(X,\mathcal O_X)$?
+
+The answer is given by the Hodge decomposition itself. 
+The isomorphism $H^2(X,\mathcal O_X) \cong H^{0,2}(X)$ identifies the map $\rho$ with a projection onto the $(0,2)$ Hodge component, and for a $(1,1)$-class that component is zero. 
+The class is expelled from $H^2(X,\mathcal O_X)$ by the structure of the Hodge decomposition itself.
 
 \begin{lemma}[Comparison with Dolbeault cohomology]\label{lem:H2-O}
-For a compact K\"ahler manifold $X$, there is a natural isomorphism
-\[
-H^2(X,\mathcal O_X) \cong H^{0,2}(X),
-\]
-where $H^{0,2}(X)$ denotes the Dolbeault cohomology of $(0,2)$-forms. 
-Under this identification and the de Rham isomorphism $H^2(X,\mathbb C) \cong \bigoplus_{p+q=2} H^{p,q}(X)$, the map $H^2(X,\mathbb Z) \to H^2(X,\mathcal O_X)$ induced by the inclusion $\mathbb Z \hookrightarrow \mathcal O_X$ factors as the composition
+For a compact K\"ahler manifold $X$, $H^2(X,\mathcal O_X) \cong H^{0,2}(X)$, and the map $\rho: H^2(X,\mathbb Z) \to H^2(X,\mathcal O_X)$ factors as
 \[
 H^2(X,\mathbb Z) \longrightarrow H^2(X,\mathbb C) \twoheadrightarrow H^{0,2}(X),
 \]
@@ -127,44 +127,39 @@ where the second arrow is the projection onto the $(0,2)$ Hodge component.
 \end{lemma}
 
 \begin{proof}
-The Dolbeault resolution $\mathcal O_X \to \mathcal A^{0,0} \xrightarrow{\bar\partial} \mathcal A^{0,1} \xrightarrow{\bar\partial} \cdots$ gives an isomorphism $H^q(X,\mathcal O_X) \cong H_{\bar\partial}^{0,q}(X)$. 
+The Dolbeault resolution $\mathcal O_X \to \mathcal A^{0,0} \xrightarrow{\bar\partial} \mathcal A^{0,1} \xrightarrow{\bar\partial} \cdots$ gives $H^q(X,\mathcal O_X) \cong H_{\bar\partial}^{0,q}(X)$. 
 For $q=2$, this is $H^{0,2}(X)$. 
-The map $H^2(X,\mathbb Z) \to H^2(X,\mathcal O_X)$ comes from the inclusion of the constant sheaf $\mathbb Z$ into $\mathcal O_X$. 
-In the Dolbeault picture, the inclusion $\mathbb Z \hookrightarrow \mathbb C \hookrightarrow \mathcal O_X$ factors through the sheaf of locally constant functions, and the induced map on cohomology sends an integral class to its de Rham class (in $H^2(X,\mathbb C)$) followed by the projection onto the $H^{0,2}$ component, because the Dolbeault cohomology $H^{0,2}$ is canonically a direct summand of $H^2(X,\mathbb C)$. 
-More precisely, the composition
-\[
-H^2(X,\mathbb Z) \to H^2(X,\mathbb C) \to H^2(X,\mathcal O_X) \cong H^{0,2}(X)
-\]
-is exactly the projection, since the Hodge filtration satisfies $F^2 H^2 = H^{2,0} \oplus H^{1,1}$ and $H^2(X,\mathcal O_X) \cong H^2 / F^2$ is isomorphic to $H^{0,2}$. 
+The inclusion $\mathbb Z_X \hookrightarrow \mathcal O_X$ factors through $\mathbb C$, and the induced map on $H^2$ sends an integral class to its de Rham image in $H^2(X,\mathbb C)$, then projects onto $H^{0,2}$ via the Hodge decomposition $H^2(X,\mathbb C) = H^{2,0} \oplus H^{1,1} \oplus H^{0,2}$. 
+The Hodge filtration satisfies $F^2 H^2 = H^{2,0} \oplus H^{1,1}$, and $H^2(X,\mathcal O_X) \cong H^2/F^2$ identifies with $H^{0,2}$. 
 See \cite{voisin-hodge}.
 \end{proof}
 
 \begin{lemma}[Vanishing in $H^{0,2}$]\label{lem:vanishing}
-Let $\alpha \in H^2(X,\mathbb Z) \cap H^{1,1}(X)$. 
-Then the image of $\alpha$ in $H^2(X,\mathcal O_X)$ is zero.
+If $\alpha \in H^2(X,\mathbb Z) \cap H^{1,1}(X)$, then $\rho(\alpha) = 0$ in $H^2(X,\mathcal O_X)$.
 \end{lemma}
 
 \begin{proof}
-By Lemma~\ref{lem:H2-O}, the image of $\alpha$ in $H^2(X,\mathcal O_X)$ is identified with its $(0,2)$ Hodge component. 
-By assumption, $\alpha$ is of pure type $(1,1)$, so its $(0,2)$ component is zero. 
-Hence it maps to $0$.
+By \cref{lem:H2-O}, $\rho(\alpha)$ is the $(0,2)$ Hodge component of $\alpha$. 
+Since $\alpha$ is of type $(1,1)$, this component is zero.
 \end{proof}
 
-We can now prove the main surjectivity statement.
+This is the moment that does not generalize. 
+The vanishing holds because the map $\rho$ factors through a projection onto $H^{0,2}$, and a $(1,1)$-class has zero projection there. 
+For $p>1$, the analogous map from $H^{2p}(X,\mathbb Z)$ would need to factor through a projection onto a component that a $(p,p)$-class also avoids --- but no sheaf plays that role.
 
 \begin{proposition}[Lifting integral $(1,1)$-classes]\label{prop:surjectivity}
 Every class $\alpha \in H^2(X,\mathbb Z) \cap H^{1,1}(X)$ is the first Chern class of some holomorphic line bundle on $X$.
 \end{proposition}
 
 \begin{proof}
-Consider the long exact sequence
+In the long exact sequence
 \[
-\cdots \to H^1(X,\mathcal O_X^*) \xrightarrow{\delta} H^2(X,\mathbb Z) \xrightarrow{\rho} H^2(X,\mathcal O_X) \to \cdots .
+\cdots \to H^1(X,\mathcal O_X^*) \xrightarrow{\delta} H^2(X,\mathbb Z) \xrightarrow{\rho} H^2(X,\mathcal O_X) \to \cdots ,
 \]
-By Lemma~\ref{lem:vanishing}, $\rho(\alpha) = 0$. 
-Therefore $\alpha$ lies in the kernel of $\rho$, which by exactness equals the image of $\delta$. 
-Hence there exists $L \in H^1(X,\mathcal O_X^*)$ such that $\delta(L) = \alpha$. 
-By Lemma~\ref{lem:exp-c1}, $\delta(L) = c_1(L)$, so $\alpha = c_1(L)$.
+\cref{lem:vanishing} gives $\rho(\alpha)=0$. 
+By exactness, $\alpha \in \ker\rho = \operatorname{im}\delta$. 
+Hence there exists $L \in H^1(X,\mathcal O_X^*)$ with $\delta(L)=\alpha$. 
+\cref{lem:exp-c1} identifies $\delta(L)=c_1(L)$, so $\alpha=c_1(L)$.
 \end{proof}
 
 \section{Main Result: The Lefschetz (1,1) Theorem}
@@ -182,8 +177,8 @@ Equivalently, every integral $(1,1)$-class on $X$ is the first Chern class of a 
 \end{theorem}
 
 \begin{proof}
-Lemma~\ref{lem:exp-c1} and Lemma~\ref{lem:c1-type} show that $c_1$ lands in the claimed subgroup. 
-Proposition~\ref{prop:surjectivity} proves that the map is surjective onto that subgroup.
+\cref{lem:exp-c1} and \cref{lem:c1-type} show $c_1$ lands in $H^2(X,\mathbb Z) \cap H^{1,1}(X)$. 
+\cref{prop:surjectivity} proves surjectivity onto that subgroup.
 \end{proof}
 
 \begin{remark}
@@ -193,26 +188,24 @@ Therefore the theorem asserts that every integral $(1,1)$-class arises from a di
 
 \section{Discussion and Open Problems}
 
-The above proof uses two ingredients that are specific to $p=1$ and fail for higher $p$:
+The proof above uses two ingredients that are specific to $p=1$ and cannot be transported to higher $p$. 
+Each failure is not a gap in technique but a structural constraint that the Hodge conjecture must navigate around.
 
 \begin{enumerate}
     \item \textbf{The exponential sequence.} 
-    For line bundles, there is the short exact sequence $0 \to \mathbb Z \to \mathcal O_X \to \mathcal O_X^* \to 0$ whose cohomology links $H^1(X,\mathcal O_X^*)$ (the Picard group) to $H^2(X,\mathbb Z)$ and $H^2(X,\mathcal O_X)$. 
-    No analogous sequence is known for higher codimension. 
-    Codimension $p$ cycles are parametrized by Chow groups $\operatorname{CH}^p(X)$, whose relation to sheaf cohomology is far more complicated. 
-    In particular, there is no sheaf whose $H^{2p}$ receives the cycle class map and whose higher direct images can be used to lift classes in a way parallel to the $p=1$ case.
+    There exists no short exact sequence of sheaves for codimension $p>1$ that plays the role that $0 \to \mathbb Z_X \to \mathcal O_X \to \mathcal O_X^* \to 0$ plays for $p=1$. 
+    The Picard group $H^1(X,\mathcal O_X^*)$ classifies line bundles; higher Chow groups $\operatorname{CH}^p(X)$ classify codimension-$p$ cycles, and their relation to sheaf cohomology involves Bloch's higher Chow groups, motivic cohomology, and complexes of sheaves whose $H^{2p}$ receives the cycle class map. 
+    No single sheaf connects these groups to $H^{2p}(X,\mathbb Z)$ in a way that mirrors the $p=1$ case.
 
-    \item \textbf{The Hodge decomposition at level $2$.} 
-    The map $H^2(X,\mathbb Z) \to H^2(X,\mathcal O_X)$ factors through projection onto $H^{0,2}(X)$. 
-    For a $(1,1)$-class, this projection vanishes. 
-    For $p>1$, any rational $(p,p)$-class has trivial projection onto $H^{p+q,p-q}(X)$ for $q\neq 0$, but the analogous map from $H^{2p}(X,\mathbb Z)$ to some cohomology group of a sheaf would need to capture exactly the non-$(p,p)$ Hodge components. 
-    There is no such sheaf; the natural recipient of the cycle class map is the Deligne cohomology or the intermediate Jacobian, which involves all Hodge components and is far from a simple projection.
+    \item \textbf{The Hodge decomposition at degree $2$.} 
+    The vanishing in \cref{lem:vanishing} works because the map $\rho$ factors through a projection onto $H^{0,2}$, which a $(1,1)$-class avoids. 
+    For $p>1$, the natural recipient of the cycle class map is the Deligne cohomology $H_{\mathcal D}^{2p}(X,\mathbb Z(p))$, whose relationship with the Hodge components of $H^{2p}(X,\mathbb C)$ is more intricate. 
+    The Abel--Jacobi map sends cycles to intermediate Jacobians, objects that encode all Hodge components, not a single projection.
 
-    \item \textbf{Obstructions and the general Hodge conjecture.} 
-    For $p\geq 2$, not every integral $(p,p)$-class is algebraic. 
-    Griffiths \cite{griffiths} constructed classes that are Hodge classes yet not algebraic, showing that the Hodge conjecture must be formulated over $\mathbb Q$ (rational coefficients) and that integrality is not sufficient. 
-    Moreover, the failure of the naive lifting argument is explained by the theory of variations of Hodge structure and the fact that the Hodge conjecture is equivalent to the statement that the Abel--Jacobi map onto the intermediate Jacobian has certain surjectivity properties, which are known to be false in general. 
-    The minimal dimension for a counterexample to an integral Hodge conjecture is $4$, while the rational Hodge conjecture remains open for all $p>1$.
+    \item \textbf{The Griffiths counterexample.} 
+    For $p \geq 2$, Griffiths \cite{griffiths} constructed classes that are of type $(p,p)$ yet are not algebraic, showing that integrality alone is insufficient and that the Hodge conjecture requires rational coefficients. 
+    The obstruction lies in the failure of the Abel--Jacobi map to be surjective onto the intermediate Jacobian. 
+    The minimal dimension for a counterexample to the \emph{integral} Hodge conjecture is $4$, while the rational Hodge conjecture remains open for all $p>1$.
 \end{enumerate}
 
 Thus, while the Lefschetz (1,1) theorem is a beautiful and elementary entry point to Hodge theory, the general Hodge conjecture demands a deeper understanding of algebraic cycles and Hodge structures that remains at the frontier of current research.
